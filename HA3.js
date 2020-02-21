@@ -49,7 +49,7 @@ var makeModel = function() {
 		    "item": item,
 		    "type": _currentType
 		});
-		stack.unshift({
+		_stack.push({
 		    "cmd":'pop'
 		    });
 		_observers.notify();
@@ -58,18 +58,19 @@ var makeModel = function() {
 
 	removeItem: function(item) {
 	    var idx = _todoItems.indexOf(item);
-	    _todoItems.splice(idx, 1);
-	    stack.unshift({
+	    _stack.push({
 		    "cmd":'add',
-		    "item":item
+		    "obj": item,
+		    "idx": _todoItems.indexOf(item)
 		    });
+	    _todoItems.splice(idx, 1);
 	    _observers.notify();
 	},
 	setTask:function(task,txt){
-		stack.unshift({
+		_stack.push({
 		    "cmd":'edit',
-		    "item":task,
-		    "txt"task.item
+		    "obj":task,
+		    "txt":task.item
 		    });
 		task.item=txt;
 		_observers.notify();
@@ -85,25 +86,32 @@ var makeModel = function() {
 	},
 
 	clearItems: function() { 
+		_stack.push({
+		    "cmd":'refill',
+		    "obj":_todoItems
+		    });
 	    _todoItems = [];
 	    _observers.notify();
 	},
-	pop: function(){
-		if(stack.length >0){
-			var task= stack.pop();
+	redo: function(){
+		if(_stack.length >0){
+			var task= _stack.pop();
+			console.log(task.cmd);
 			if(task.cmd=='edit'){
-				setTask(task.item,task.txt);
+				this.setTask(task.obj,task.txt);
 			}
 			else if(task.cmd=='add'){
-				addItem(task.item);
+				_todoItems.splice(task.idx,0,task.obj);
+			}
+			else if (task.cmd=='pop'){
+				_todoItems.pop();
 			}
 			else{
-				_todoItems.pop();
+				_todoItems=task.obj;
 			}
 			_observers.notify();
 		}
-	}
- 
+	},
 	register: function(fxn) { _observers.add(fxn); }
     };
 }
@@ -179,7 +187,7 @@ var makeAddControls = function(model, txtId, btnId) {
     };
     
 }
-var makeRedoControls = function(model, btnId) {
+var makeRedoControls = function(btnId) {
     var _btn = document.getElementById(btnId);
     var _observers = makeSignaller();
     
@@ -190,9 +198,6 @@ var makeRedoControls = function(model, btnId) {
     });
  
     return {
-	render: function() {
-	    _txt.value = "";
-	},
 
 	register: function(fxn) { _observers.add(fxn); }
     };
@@ -279,6 +284,9 @@ var makeController = function(model) {
 		case ha2.signal.edit:
 		    model.setTask(evt.value,evt.txt);
 		    break;
+		case ha2.signal.redo:
+		    model.redo();
+		    break;
 		case ha2.signal.setType:
 		    model.setType(evt.value);
 		    break;
@@ -295,8 +303,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var model = makeModel();
     var view = makeListView(model, 'listDiv');
     var controls1 = makeAddControls(model, 'addTxt', 'addBtn');
-    var redoBtn=makeRedoControls(model)
-
+   
+    var redoBtn =makeRedoControls('redoBtn');
     var workBtn = makeCategoryControl('workBtn', ha2.todoType.work);
     var schoolBtn = makeCategoryControl('schoolBtn', ha2.todoType.school);
     var playBtn = makeCategoryControl('playBtn', ha2.todoType.play);
@@ -310,4 +318,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
     playBtn.register(controller.dispatch);
     schoolBtn.register(controller.dispatch);
     clearBtn.register(controller.dispatch);
+    redoBtn.register(controller.dispatch);
 });
