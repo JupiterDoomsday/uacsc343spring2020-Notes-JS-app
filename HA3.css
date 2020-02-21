@@ -1,0 +1,64 @@
+html, body {
+    font: 14pt sans-serif;
+    padding: 10px;
+}
+
+.done {
+ text-decoration: line-through;
+}
+
+input[type=button] {
+ -webkit-appearance: none;
+ font: 14pt sans-serif;
+}
+
+input {
+ -webkit-appearance: none;
+ font: 14pt sans-serif;
+ margin: 10px; 
+
+}
+
+#addTxt {
+    width: 400px;
+}
+
+.TODOcolumn {
+    display: inline-block;
+    vertical-align: top;
+}
+
+#controlsDiv {
+    margin-top: 3em;
+}
+
+#mainDiv{
+}
+
+.controlsElms {
+    -webkit-appearance: none;
+    width: 150px;
+    text-align: center;
+    display: block;
+}
+
+.clearElm {
+    margin-top: 25px;
+}
+
+.listItem {
+    padding: 5px;
+    margin-left: 10px;
+}
+
+.listWhite {
+    background-color: white;
+}
+
+.listGray {
+    background-color: lightgray;
+}
+
+.listLabel {
+    font-weight: bold;
+}
