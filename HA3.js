@@ -50,7 +50,7 @@ var makeModel = function() {
 		    "type": _currentType
 		});
 		_stack.push({
-		    "cmd":'pop'
+		    "cmd":'pop',
 		    });
 		_observers.notify();
 	    }
@@ -96,7 +96,6 @@ var makeModel = function() {
 	redo: function(){
 		if(_stack.length >0){
 			var task= _stack.pop();
-			console.log(task.cmd);
 			if(task.cmd=='edit'){
 				this.setTask(task.obj,task.txt);
 			}
@@ -104,7 +103,7 @@ var makeModel = function() {
 				_todoItems.splice(task.idx,0,task.obj);
 			}
 			else if (task.cmd=='pop'){
-				_todoItems.pop();
+				_todoItems.splice(0,1);
 			}
 			else{
 				_todoItems=task.obj;
@@ -243,7 +242,7 @@ var makeListView = function(model, listId) {
 	    		});
 			});
 			newDiv.append(btn);
-			_list.appendChild(newDiv);
+			_list.append(newDiv);
    		}
     }
 
