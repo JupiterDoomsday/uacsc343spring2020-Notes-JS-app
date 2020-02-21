@@ -97,7 +97,7 @@ var makeModel = function() {
 		if(_stack.length >0){
 			var task= _stack.pop();
 			if(task.cmd=='edit'){
-				this.setTask(task.obj,task.txt);
+				task.obj.item=task.txt;
 			}
 			else if(task.cmd=='add'){
 				_todoItems.splice(task.idx,0,task.obj);
@@ -234,12 +234,15 @@ var makeListView = function(model, listId) {
 	    		});
 			});
 			newSpan.addEventListener('click', function() {
+				var newText =prompt("edit task",item.item);
+				if(newText.length > 0){
+					_observers.notify({
+					type: ha2.signal.edit,
+					value: item,
+					txt: newText
+	    			});
 
-	    		_observers.notify({
-				type: ha2.signal.edit,
-				value: item,
-				txt: "scrum"
-	    		});
+				}
 			});
 			newDiv.append(btn);
 			_list.append(newDiv);
