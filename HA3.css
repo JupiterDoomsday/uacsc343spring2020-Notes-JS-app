@@ -46,7 +46,7 @@ input {
 
 #mainDiv{
 	width: 700px;
-	height: 400px;
+	height: 500px;
 	padding: 15pt;
 	margin: auto;
 	margin-bottom: 0px;
@@ -77,29 +77,39 @@ input {
 #clearBtn{
  	height: 32px;
 	width: 33px;
-	margin-top: 0px;
+	margin-top: 5px;
  	background-image: url('images/garbage.png');
  	margin-left: 550px;
+ 	background-color: transparent;
 }
 #redoBtn{
 	background-image: url('images/redo.png');
 	width: 32px;
 	height: 32px;
-	border-radius: 16px;
+	background-color: transparent;
 }
 #addBtn{
 	background-image: url('images/add.png');
 	width: 32px;
 	height: 33px;
-	border-radius: 16px;
+	background-color: transparent;
+}
+.editBtn{
+	background-image: url('images/edit.png');
+	width: 32px;
+	height: 32px;
+	margin-left: 7pt;
+	border-style: none;
+	background-color: transparent;
 	padding: 0px;
 }
 .xBtn{
+
 	background-image: url('images/x-button.png');
 	height: 16px;
 	width: 16px;
 	border-style: none;
-	border-radius: 8px;
+	background-color: transparent;
 	float: right;
 }
 

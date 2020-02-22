@@ -118,6 +118,9 @@ var makeModel = function() {
 	    _currentType = newType;
 	    _observers.notify();
 	},
+	getType: function(){
+		return _currentType;
+	},
 	clearItems: function() { 
 		var _stack= this._getStack();
 		if(_currentType== ha2.todoType.work){
@@ -184,7 +187,6 @@ var makeCategoryControl = function(btnId, category) {
     var _observers = makeSignaller();
     
     _btn.addEventListener('click', function() {
-	console.log(category);
 	_observers.notify({
 	    type: ha2.signal.setType,
 	    value: category
@@ -266,16 +268,20 @@ var makeRedoControls = function(btnId) {
 // model - a reference to the model
 // listId - the Id of the element holding the list, expected to be a div
 //
-var makeListView = function(model, listId) {
+var makeListView = function(model, listId,page) {
     var _list = document.getElementById(listId);
     var _observers = makeSignaller();
+    var _page=document.getElementById(page);
     
     var _addItem = function(item, num) {
    		if(item.item.length>0){
    			var newDiv = document.createElement('div');
 			var newSpan = document.createElement('span');
 			var btn = document.createElement("BUTTON");
+			var editBtn = document.createElement("BUTTON");
 			newSpan.setAttribute('class', 'listLabel');
+			editBtn.setAttribute('class', 'editBtn');
+			btn.setAttribute('class', 'xBtn');
 			if (num % 2 === 0) {
 	    		newDiv.setAttribute('class', 'listItem listWhite');
 			} else {
@@ -290,7 +296,7 @@ var makeListView = function(model, listId) {
 				value: item
 	    		});
 			});
-			newSpan.addEventListener('click', function() {
+			editBtn.addEventListener('click', function() {
 				var newText =prompt("edit task",item.item);
 				if(newText.length > 0){
 					_observers.notify({
@@ -301,6 +307,7 @@ var makeListView = function(model, listId) {
 
 				}
 			});
+			newDiv.appendChild(editBtn);
 			newDiv.append(btn);
 			_list.append(newDiv);
    		}
@@ -313,6 +320,19 @@ var makeListView = function(model, listId) {
 	    }
 
 	    var items = model.getItems();
+	    if(model.getType() == ha2.todoType.work){
+	    	_page.style.backgroundColor ='bisque';
+	    }
+	    else if(model.getType() == ha2.todoType.school){
+	    	_page.style.backgroundColor ='#eaa221';
+	    }
+	    else if(model.getType() == ha2.todoType.play){
+	    	_page.style.backgroundColor ='#ff8c69';
+	    }
+	    else{
+	    	_page.style.backgroundColor ='black';
+	    }
+
 	    for (var i = 0; i < items.length; i++) {
 		_addItem(items[i], i);
 	    }
@@ -360,7 +380,7 @@ var makeController = function(model) {
 //
 document.addEventListener("DOMContentLoaded", function(event) {
     var model = makeModel();
-    var view = makeListView(model, 'listDiv');
+    var view = makeListView(model, 'listDiv', 'mainDiv');
     var controls1 = makeAddControls(model, 'addTxt', 'addBtn');
    
     var redoBtn =makeRedoControls('redoBtn');
