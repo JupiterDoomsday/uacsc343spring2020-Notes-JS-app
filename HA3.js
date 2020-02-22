@@ -37,26 +37,46 @@ var makeSignaller = function() {
 // makes the model for the todo system
 //
 var makeModel = function() {
-    var _todoItems = [];
+    var _todoWorkItems = [];
+    var _todoSchoolItems = [];
+    var _todoPlayItems = [];
     var _currentType = ha2.todoType.work 
     var _observers = makeSignaller();
-    var _stack = [];
+    var _workStack = [];
+    var _schoolStack = [];
+    var _playStack = [];
  
     return {
 	addItem: function(item) {
 	    if (item.length > 0) {
-		_todoItems.unshift({
-		    "item": item,
-		    "type": _currentType
-		});
-		_stack.push({
-		    "cmd":'pop',
-		    });
+	    	var _curItemList= this.getItems();
+	    	var _curStack= this._getStack();
+	    		_curItemList.unshift({
+		   			"item": item,
+		   			 "type": _currentType
+				});
+				_curStack.push({
+		    		"cmd":'pop',
+		    	});
 		_observers.notify();
 	    }
 	},
-
+	_getStack: function(){
+		switch(_currentType){
+			case ha2.todoType.work:
+				return _workStack;
+			case ha2.todoType.school:
+				return _schoolStack;
+			case ha2.todoType.play:
+			return _playStack;
+			default:
+			console.log("Error, invalid type");
+			break;
+		}
+	},
 	removeItem: function(item) {
+		var _todoItems= this.getItems();
+		var _stack= this._getStack();
 	    var idx = _todoItems.indexOf(item);
 	    _stack.push({
 		    "cmd":'add',
@@ -67,6 +87,7 @@ var makeModel = function() {
 	    _observers.notify();
 	},
 	setTask:function(task,txt){
+		var _stack= this._getStack();
 		_stack.push({
 		    "cmd":'edit',
 		    "obj":task,
@@ -79,21 +100,52 @@ var makeModel = function() {
 		task.type=typ;
 		_observers.notify();
 	},
-	getItems: function() { return _todoItems; },
+	getItems: function() {
+		switch(_currentType){ 
+			case ha2.todoType.work:
+				return _todoWorkItems;
+			case ha2.todoType.school:
+				return _todoSchoolItems;
+			case ha2.todoType.play:
+				return _todoPlayItems;
+			default:
+				console.log("Error, invalid type");
+			break;
+		}
+	},
 
 	setType: function(newType) {
 	    _currentType = newType;
+	    _observers.notify();
 	},
-
 	clearItems: function() { 
-		_stack.push({
+		var _stack= this._getStack();
+		if(_currentType== ha2.todoType.work){
+			_stack.push({
 		    "cmd":'refill',
-		    "obj":_todoItems
+		    "obj":_todoWorkItems
 		    });
-	    _todoItems = [];
+			_todoWorkItems=[];
+		}
+		else if(_currentType== ha2.todoType.play){
+			_stack.push({
+		    "cmd":'refill',
+		    "obj":_todoPlayItems
+		    });
+	    	_todoPlayItems = [];
+	    }
+	    else if(_currentType== ha2.todoType.school){
+	    	_stack.push({
+		    "cmd":'refill',
+		    "obj":_todoSchoolItems
+		    });
+	    	_todoSchoolItems = [];
+	    }
 	    _observers.notify();
 	},
 	redo: function(){
+		var _stack= this._getStack();
+		var _todoItems= this.getItems();
 		if(_stack.length >0){
 			var task= _stack.pop();
 			if(task.cmd=='edit'){
@@ -105,8 +157,13 @@ var makeModel = function() {
 			else if (task.cmd=='pop'){
 				_todoItems.splice(0,1);
 			}
-			else{
-				_todoItems=task.obj;
+			else if (task.cmd=='refill'){
+				if(_currentType== ha2.todoType.work)
+					_todoWorkItems=task.obj;
+				else if(_currentType== ha2.todoType.play)
+					_todoPlayItems=task.obj;
+				else if(_currentType== ha2.todoType.school)
+					_todoSchoolItems=task.obj;
 			}
 			_observers.notify();
 		}

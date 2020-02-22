@@ -1,15 +1,25 @@
 html, body {
-    font: 14pt sans-serif;
+    font: 14pt "Comic Sans MS",sans-serif;
     padding: 10px;
+}
+body{
+	/*background-image: url("images/Pop_90s.jpg")*/
+	background-color: black;
 }
 
 .done {
  text-decoration: line-through;
 }
+.TODOcolumn {
+    display: inline-block;
+    vertical-align: top;
+}
 
 input[type=button] {
  -webkit-appearance: none;
+ margin-bottom: 0px;
  font: 14pt sans-serif;
+ border-style: none;
 }
 
 input {
@@ -22,17 +32,34 @@ input {
 #addTxt {
     width: 400px;
 }
-
-.TODOcolumn {
-    display: inline-block;
-    vertical-align: top;
+#listDiv{
+	overflow: scroll;
 }
+
 
 #controlsDiv {
     margin-top: 3em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #mainDiv{
+	width: 700px;
+	height: 400px;
+	padding: 15pt;
+	margin: auto;
+	margin-bottom: 0px;
+	background-color: bisque;
+}
+#workBtn{
+	background-color: bisque;
+}
+#schoolBtn{
+	background-color: #eaa221;
+}
+#playBtn{
+	background-color: #ff8c69;
 }
 
 .controlsElms {
@@ -40,10 +67,40 @@ input {
     width: 150px;
     text-align: center;
     display: block;
+     border-top-left-radius: 10px;
+	 border-top-right-radius: 10px;
 }
-
-.clearElm {
-    margin-top: 25px;
+#clear{
+ 	display: flex;
+	justify-content: center;
+}
+#clearBtn{
+ 	height: 32px;
+	width: 33px;
+	margin-top: 0px;
+ 	background-image: url('images/garbage.png');
+ 	margin-left: 550px;
+}
+#redoBtn{
+	background-image: url('images/redo.png');
+	width: 32px;
+	height: 32px;
+	border-radius: 16px;
+}
+#addBtn{
+	background-image: url('images/add.png');
+	width: 32px;
+	height: 33px;
+	border-radius: 16px;
+	padding: 0px;
+}
+.xBtn{
+	background-image: url('images/x-button.png');
+	height: 16px;
+	width: 16px;
+	border-style: none;
+	border-radius: 8px;
+	float: right;
 }
 
 .listItem {
