@@ -1,47 +1,46 @@
 html, body {
-    font: 14pt "Comic Sans MS",sans-serif;
+    font: 14pt sans-serif;
     padding: 10px;
 }
 body{
-	/*background-image: url("images/Pop_90s.jpg")*/
 	background-color: black;
 }
 
 .done {
- text-decoration: line-through;
+ 	text-decoration: line-through;
 }
 .TODOcolumn {
     display: inline-block;
     vertical-align: top;
 }
-
 input[type=button] {
- -webkit-appearance: none;
- margin-bottom: 0px;
- font: 14pt sans-serif;
- border-style: none;
+ 	-webkit-appearance: none;
+ 	margin-bottom: 0px;
+ 	font: 14pt sans-serif;
+ 	border-style: none;
 }
-
 input {
- -webkit-appearance: none;
- font: 14pt sans-serif;
- margin: 10px; 
-
+ 	-webkit-appearance: none;
+ 	font: 14pt sans-serif;
+ 	margin: 10px; 
 }
-
 #addTxt {
     width: 400px;
 }
 #listDiv{
 	overflow: scroll;
 }
-
-
 #controlsDiv {
     margin-top: 3em;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+#lbl{
+	margin-bottom: 3pt;
+}
+#inputDiv{
+	margin-top: 0px;
 }
 
 #mainDiv{
